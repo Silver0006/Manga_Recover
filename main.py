@@ -41,10 +41,15 @@ time.sleep(15)
 time.sleep(2) 
 driver.get("https://global.bookwalker.jp/holdBooks/") 
 time.sleep(2)  
-myName = driver.find_element(By.CSS_SELECTOR, "div.md-book-list")
+table = []
+myName = driver.find_elements(By.CSS_SELECTOR, ".md-book-list .book-tl-txt h2")
 
-sourceFile = open((os.path.dirname(os.path.realpath(__file__))) + '\\export\\test.html', 'w', encoding="utf-8")
-print(myName.get_attribute("innerHTML"), file = sourceFile)
+for myName2 in myName:
+   table.append(myName2.get_attribute("innerHTML"))
+
+sourceFile = open((os.path.dirname(os.path.realpath(__file__))) + '\\directory.html', 'w', encoding="utf-8")
+print(table, file = sourceFile)
 sourceFile.close()
-## if needed to check html functionality print(myName.get_attribute("innerHTML"))
+
+
 driver.close()
