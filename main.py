@@ -1,8 +1,19 @@
 import undetected_chromedriver as uc 
 import chromedriver_autoinstaller
-import time, getpass, os
+import time, getpass, os, sys
 from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
+
+if (os.path.isfile((os.path.dirname(os.path.realpath(__file__))) + "\\.env")) == False:
+    print("This program requires you to input your email and password only once.")
+    print("To change email and password delete the .env that is created in the same directory as the program.")
+    user_name = input("Enter your bookwalker Email: ")
+    pass_word = input("Enter your bookwalker Password: ")
+    sourceFile = open((os.path.dirname(os.path.realpath(__file__))) + "\\.env", 'w', encoding="utf-8")
+    print("user_name=" + user_name, file = sourceFile)
+    print("pass_word=" + pass_word, file = sourceFile)
+    sourceFile.close()
+    
 
 load_dotenv()
 username = os.getenv('user_name') 
