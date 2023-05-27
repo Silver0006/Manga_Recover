@@ -51,5 +51,12 @@ sourceFile = open((os.path.dirname(os.path.realpath(__file__))) + '\\directory.h
 print(table, file = sourceFile)
 sourceFile.close()
 
+print(table)
+book_name = input("Enter your the link of the book you want: ")
+driver.get(book_name) 
+time.sleep(2) 
+
+driver.find_element(By.PARTIAL_LINK_TEXT, 'Read on Browser').click() 
+time.sleep(50) 
 
 driver.close()
