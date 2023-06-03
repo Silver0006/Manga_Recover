@@ -43,11 +43,13 @@ driver.get("https://global.bookwalker.jp/holdBooks/")
 time.sleep(2)  
 table = []
 myName = driver.find_elements(By.CSS_SELECTOR, ".md-book-list .book-tl-txt h2")
+pathfinder = os.path.dirname(os.path.realpath(__file__))
+
 
 for myName2 in myName:
    table.append(myName2.get_attribute("innerHTML"))
 
-sourceFile = open((os.path.dirname(os.path.realpath(__file__))) + '\\directory.html', 'w', encoding="utf-8")
+sourceFile = open((pathfinder) + '\\directory.html', 'w', encoding="utf-8")
 print(table, file = sourceFile)
 sourceFile.close()
 
@@ -57,6 +59,20 @@ driver.get(book_name)
 time.sleep(2) 
 
 driver.find_element(By.PARTIAL_LINK_TEXT, 'Read on Browser').click() 
+time.sleep(5)
+
+page_count = int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[1])
+print(page_count)
+
+if (os.path.exists((pathfinder) + "\\export")) == False:
+    os.mkdir(str((pathfinder) + "\\export"))
+
+if (os.path.exists((pathfinder) + "\\export")) == False:
+    print("directory creation failed")
+else:
+    print("directory creation successful")
+
+driver.save_screenshot(((pathfinder) + "\\export\\test.png"))
 time.sleep(50) 
 
 driver.close()
