@@ -86,7 +86,7 @@ for i in range(1, ((int(str(current_page_count)))+1)):
     
 for i in range(1, ((int(str(page_count)))+1)):
     print(i)
-    time.sleep(5)
+    time.sleep(2)
     driver.save_screenshot(((pathfinder) + "\\export\\" + str(i) + ".png"))
     action.click(on_element = canvas)
     action.send_keys(Keys.PAGE_DOWN)
