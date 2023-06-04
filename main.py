@@ -2,10 +2,12 @@ import undetected_chromedriver as uc
 import chromedriver_autoinstaller
 import time, getpass, os, sys
 from dotenv import load_dotenv
+from PIL import Image
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
+## Checks to see if login is saved
 if (os.path.isfile((os.path.dirname(os.path.realpath(__file__))) + "\\.env")) == False:
     print("This program requires you to input your email and password only once.")
     print("To change email and password delete the .env that is created in the same directory as the program.")
@@ -16,7 +18,7 @@ if (os.path.isfile((os.path.dirname(os.path.realpath(__file__))) + "\\.env")) ==
     print("pass_word=" + pass_word, file = sourceFile)
     sourceFile.close()
     
-
+## Loads email and password
 load_dotenv()
 username = os.getenv('user_name') 
 password = os.getenv('pass_word')
@@ -38,7 +40,9 @@ try:
 except:
     driver.find_element(By.ID, "recaptchaLoginBtn").click() 
 time.sleep(15) 
-##program workaround for captcha
+## need to program workaround for captcha
+
+## Collects book list and displays it in console window
 
 time.sleep(2) 
 driver.get("https://global.bookwalker.jp/holdBooks/") 
@@ -67,6 +71,8 @@ page_count = int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split
 current_page_count = int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[0])
 print(page_count)
 
+## Checks if export directory exists. If not it creates one.
+
 if (os.path.exists((pathfinder) + "\\export")) == False:
     os.mkdir(str((pathfinder) + "\\export"))
 
@@ -77,24 +83,34 @@ else:
 
 canvas = driver.find_element(By.CSS_SELECTOR, "#viewer")
 action = ActionChains(driver)
-action.click(on_element = canvas)
+element1 = driver.find_element(By.CSS_SELECTOR, "#menu")
+element2 = driver.find_element(By.CSS_SELECTOR, "#pageSlider")
   
-for i in range(1, ((int(str(current_page_count)))+1)):
+## Goes through manga and captures images
+
+for i in range(1, ((int(str(current_page_count)))+2)):
     action.click(on_element = canvas)
     action.send_keys(Keys.PAGE_UP)
     action.perform()
     
-for i in range(1, ((int(str(page_count)))+1)):
+for i in range(1, (((int(str(page_count)))//2)+2)):
     print(i)
-    time.sleep(2)
+    time.sleep(3)
     driver.save_screenshot(((pathfinder) + "\\export\\" + str(i) + ".png"))
-    action.click(on_element = canvas)
     action.send_keys(Keys.PAGE_DOWN)
     action.perform()
 else:
     print("Completed?")
 
-time.sleep(50) 
-##add images combine to pdf feature.
+## Makes Images into PDF
+
+images = [
+    Image.open(str(pathfinder) + "\\export\\" + str(f) + ".png").convert('RGB')
+    for f in range(1, (((int(str(page_count)))//2)+1)) 
+]
+
+images[0].save(pathfinder + "\\manga.pdf", "PDF" ,resolution=100.0, save_all=True, append_images=images[1:])
+
+time.sleep(10) 
 
 driver.close()
