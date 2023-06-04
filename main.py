@@ -3,6 +3,8 @@ import chromedriver_autoinstaller
 import time, getpass, os, sys
 from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
 if (os.path.isfile((os.path.dirname(os.path.realpath(__file__))) + "\\.env")) == False:
     print("This program requires you to input your email and password only once.")
@@ -62,6 +64,7 @@ driver.find_element(By.PARTIAL_LINK_TEXT, 'Read on Browser').click()
 time.sleep(5)
 
 page_count = int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[1])
+current_page_count = int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[0])
 print(page_count)
 
 if (os.path.exists((pathfinder) + "\\export")) == False:
@@ -72,7 +75,26 @@ if (os.path.exists((pathfinder) + "\\export")) == False:
 else:
     print("directory creation successful")
 
-driver.save_screenshot(((pathfinder) + "\\export\\test.png"))
+canvas = driver.find_element(By.CSS_SELECTOR, "body")
+action = ActionChains(driver)
+action.click(on_element = canvas)
+  
+for i in range(1, (((int(str(current_page_count)))//2)+1)):
+    action.click(on_element = canvas)
+    canvas.send_keys(Keys.PAGE_UP)
+    action.perform()
+    
+for i in range(1, (((int(str(page_count)))//2)+1)):
+    print(i)
+    time.sleep(5)
+    driver.save_screenshot(((pathfinder) + "\\export\\" + str(i) + ".png"))
+    action.click(on_element = canvas)
+    canvas.send_keys(Keys.PAGE_DOWN)
+    action.perform()
+else:
+    print("Completed?")
+
 time.sleep(50) 
+##add images combine to pdf feature.
 
 driver.close()
