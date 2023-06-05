@@ -1,6 +1,8 @@
 # Manga_Recover
 A project I started to learn more about selenium in python. The program is designed to allow you to download Manga in a PDF from https://global.bookwalker.jp/
 
+Packaged in AUTO-PY-TO-EXE and NSIS.
+
 It currently works in english and is very tempermental. I plan to continue development adding further support and stability.
 There is a slight problem with captcha and Bookwalker's own system which means it may take a few attempt. You may also have to wait inbetween trys. I plan to fix this in a later update.
 
