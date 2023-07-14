@@ -1,8 +1,6 @@
 import undetected_chromedriver as uc 
 import chromedriver_autoinstaller
-import time, os, sys
-import tkinter as tk
-from tkinter import simpledialog
+import time, os
 from dotenv import load_dotenv
 from PIL import Image
 from selenium.webdriver.common.by import By
@@ -10,35 +8,17 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
 
-## Sets user interface
-magic_number = int(input("Select 1 for TUI / Select 2 for GUI "))
-
-
-
 ## Checks to see if login is saved
 if ((os.path.isfile((os.path.dirname(os.path.realpath(__file__))) + "\\.env")) == False) or (os.path.getsize(((os.path.dirname(os.path.realpath(__file__))) + "\\.env")) == 0):
     print("This program requires you to input your email and password only once.")
     print("To change email and password delete the .env that is created in the same directory as the program.")
-    if magic_number < 2:
-        user_name = input("Enter your bookwalker Email: ")
-        pass_word = input("Enter your bookwalker Password: ")
-        sourceFile = open((os.path.dirname(os.path.realpath(__file__))) + "\\.env", 'w', encoding="utf-8")
-        print("user_name=" + user_name, file = sourceFile)
-        print("pass_word=" + pass_word, file = sourceFile)
-        sourceFile.close()
-    elif magic_number > 1:
-        pass_word = None
-        try:
-            user_name = simpledialog.askstring(title = "Email", prompt="Enter your bookwalker Email:")
-            pass_word = simpledialog.askstring(title = "Password", prompt="Enter your bookwalker Password:")
-        except:
-            print("User Input Failed")
-            quit()
-        else:
-            sourceFile = open((os.path.dirname(os.path.realpath(__file__))) + "\\.env", 'w', encoding="utf-8")
-            print("user_name=" + user_name, file = sourceFile)
-            print("pass_word=" + pass_word, file = sourceFile)
-            sourceFile.close()
+    user_name = input("Enter your bookwalker Email: ")
+    pass_word = input("Enter your bookwalker Password: ")
+    sourceFile = open((os.path.dirname(os.path.realpath(__file__))) + "\\.env", 'w', encoding="utf-8")
+    print("user_name=" + user_name, file = sourceFile)
+    print("pass_word=" + pass_word, file = sourceFile)
+    sourceFile.close()
+
 
 ## Loads email and password
 load_dotenv()
@@ -84,10 +64,7 @@ sourceFile.close()
 driver.get(pathfinder + "\\directory.html") 
 print(table)
 time.sleep(2)
-if magic_number < 2:
-    book_name = input("Enter the link of the book you want: ")
-elif magic_number > 1:
-    book_name = simpledialog.askstring(title = "Book Link", prompt="Enter the link of the book you want:")
+book_name = input("Enter the link of the book you want: ")
 driver.get(book_name) 
 time.sleep(2) 
 
