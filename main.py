@@ -3,19 +3,28 @@ import chromedriver_autoinstaller
 import time, os
 from dotenv import load_dotenv
 from PIL import Image
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+import geckodriver_autoinstaller
 import customtkinter
 
 
 pathfinder = os.path.dirname(os.path.realpath(__file__))
-version_main = int(chromedriver_autoinstaller.get_chrome_version().split(".")[0])
-chromeOptions = uc.ChromeOptions() 
-chromeOptions.add_argument("--headless=new")
-driver = uc.Chrome(uc.ChromeOptions())
-driver.minimize_window()
 
+try:
+    chromedriver_autoinstaller.install()
+    version_main = int(chromedriver_autoinstaller.get_chrome_version().split(".")[0])
+    chromeOptions = uc.ChromeOptions() 
+    chromeOptions.add_argument("--headless=new")
+    driver = uc.Chrome(uc.ChromeOptions())
+    browser_status=1
+except:
+    geckodriver_autoinstaller.install()
+    driver = webdriver.Firefox()
+    browser_status=2
+driver.minimize_window()
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -41,10 +50,16 @@ class App(customtkinter.CTk):
         self.sidebar_frame.grid_rowconfigure(4, weight=1)
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Manga_Recover", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
-        self.update_label = customtkinter.CTkLabel(self.sidebar_frame, text="0/0", font=customtkinter.CTkFont(size=15, weight="normal"))
-        self.update_label.grid(row=1, column=0, padx=20, pady=(20, 10))
+        if browser_status==1:
+            self.browser_label = customtkinter.CTkLabel(self.sidebar_frame, text="Browser - Chrome", font=customtkinter.CTkFont(size=15, weight="normal"))
+            self.browser_label.grid(row=1, column=0, padx=20, pady=(20, 10))
+        if browser_status==2:
+            self.browser_label = customtkinter.CTkLabel(self.sidebar_frame, text="Browser - Firefox", font=customtkinter.CTkFont(size=15, weight="normal"))
+            self.browser_label.grid(row=1, column=0, padx=20, pady=(20, 10))
+        self.update_label = customtkinter.CTkLabel(self.sidebar_frame, text="0/0 Pages", font=customtkinter.CTkFont(size=15, weight="normal"))
+        self.update_label.grid(row=2, column=0, padx=20, pady=(20, 10))
         self.instruction_label = customtkinter.CTkLabel(self.sidebar_frame, text="1. Login\n\n" + "2. Hit Retrieve Data and Wait for list to appear\n\n" + "3. Enter URL\n\n" + "4. Click Scan and Wait for Completion", font=customtkinter.CTkFont(size=12, weight="normal"))
-        self.instruction_label.grid(row=2, column=0, padx=20, pady=(80, 10))
+        self.instruction_label.grid(row=3, column=0, padx=20, pady=(80, 10))
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Created by Silver0006", font=customtkinter.CTkFont(size=10, weight="normal"))
         self.logo_label.grid(row=5, column=0, padx=20, pady=(20, 10))
 
@@ -171,7 +186,7 @@ class App(customtkinter.CTk):
             
         for i in range(1, (((int(str(page_count)))//2)+2)):
             print(str(str(i) + "/" + (str((page_count//2)+2))))
-            self.update_label.configure(text=(str(i) + "/" + (str((page_count//2)+2))))
+            self.update_label.configure(text=(str(i) + "/" + (str((page_count//2)+2)) + "Pages"))
             self.update()
             time.sleep(3)
             driver.save_screenshot(((pathfinder) + "\\export\\" + str(i) + ".png"))
