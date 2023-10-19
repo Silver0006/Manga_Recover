@@ -6,7 +6,7 @@ Packaged in AUTO-PY-TO-EXE and NSIS.
 It currently works in English and is very temperamental. I plan to continue development adding further support and stability.
 There is a slight problem with Captcha and Bookwalker's system, which means it may take a few attempts. You may also have to wait in between tries. I plan to fix this in a later update.
 
-Relies on Google Chrome being installed.
+Relies on Google Chrome or Firefox being installed.
 
 ## Instructions
 1. Open the program and enter login. 
