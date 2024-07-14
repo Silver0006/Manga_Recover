@@ -1,3 +1,8 @@
+# Update
+I have decided to cancel this project. A simple search through GitHub can find applications with the same capability and far superior ability. 
+I originally started this project to help myself learn selenium. I believe that further development using selenium would be a waste and would like to focus my abilities elsewhere.
+I have found a far more efficient way to develop such a program which I will continue to do in private.
+
 # Manga_Recover
 A project I started to learn more about selenium in Python. The program is designed to allow you to download Manga in a PDF from https://global.bookwalker.jp/
 
