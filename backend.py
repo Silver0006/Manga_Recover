@@ -1,4 +1,5 @@
-## wait until fixed causing distutils error import undetected_chromedriver as uc 
+## wait until fixed causing distutils error 
+import undetected_chromedriver as uc 
 import chromedriver_autoinstaller
 import time, os
 from dotenv import load_dotenv
@@ -43,9 +44,16 @@ password = os.getenv('pass_word')
 
 
 try:
-    version_main = int(chromedriver_autoinstaller.get_chrome_version().split(".")[0])
     chromeOptions = uc.ChromeOptions() 
     chromeOptions.add_argument("--headless=new")
+        # Adding argument to disable the AutomationControlled flag 
+    chromeOptions.add_argument("--disable-blink-features=AutomationControlled") 
+    
+    # Exclude the collection of enable-automation switches 
+    chromeOptions.add_experimental_option("excludeSwitches", ["enable-automation"]) 
+    
+    # Turn-off userAutomationExtension 
+    chromeOptions.add_experimental_option("useAutomationExtension", False) 
     driver = uc.Chrome(uc.ChromeOptions())
     browser_status=0
 except:
@@ -101,18 +109,25 @@ driver.minimize_window()
 driver.get(pathfinder + "\\directory.html") 
 print(table)
 time.sleep(2)
-book_name = input("Enter the link of the book you want: ")
-driver.get(book_name) 
-time.sleep(2) 
+skipselect = input("Insert link to skip selection or leave empty to see selection")
+if not skipselect:
+    book_name = input("Enter the link of the book you want: ")
+    driver.get(book_name) 
+    time.sleep(2) 
 
-driver.maximize_window()
-driver.find_element(By.CLASS_NAME, "gdpr-accept").click()
-try:   
-    driver.find_element(By.PARTIAL_LINK_TEXT, 'Read on Browser').click() 
-except:
-    driver.find_element(By.CSS_SELECTOR, "p.btn-read.m-b20").click() 
-time.sleep(5)
-
+    driver.maximize_window()
+    time.sleep(3)
+    driver.find_element(By.CLASS_NAME, "gdpr-accept").click()
+    try:   
+        driver.find_element(By.PARTIAL_LINK_TEXT, 'Read on Browser').click() 
+    except:
+        driver.find_element(By.CSS_SELECTOR, ".a-read-on-btn").click() 
+    time.sleep(5)
+else:
+    driver.get(skipselect) 
+    time.sleep(2) 
+    driver.maximize_window()
+    time.sleep(5)
 page_count = int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[1])
 current_page_count = int(str(driver.find_element(By.ID, 'pageSliderCounter').text).split('/')[0])
 print(page_count)
